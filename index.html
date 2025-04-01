@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Portfólio de Yrozxm .">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yrozxm - Portfólio Web</title>
+  <link rel="icon" type="image/png" href="img/icon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0d0d0d;
+      --primary-color: #8e44ad;
+      --secondary-color: #9b59b6;
+      --accent-color: #e74c3c;
+      --text-color: #ecf0f1;
+      --chat-bg: #1e1e1e;
+      --chat-user-bg: #4a4a4a;
+      --chat-bot-bg: #333333;
+    }
+    /* Reset e configuração base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+    /* Canvas para partículas */
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    nav h1 {
+      color: var(--secondary-color);
+      font-size: 1.8em;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+    nav ul li {
+      margin-left: 20px;
+    }
+    nav ul li a {
+      color: var(--text-color);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav ul li a:hover {
+      color: var(--accent-color);
+    }
+    .time-display {
+      background: var(--accent-color);
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.9em;
+      color: #fff;
+    }
+    /* Hero Section */
+    header.hero {
+      margin-top: 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--bg-color));
+      position: relative;
+      z-index: 1;
+    }
+    header.hero img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px solid var(--secondary-color);
+      object-fit: cover;
+    }
+    header.hero h2 {
+      margin: 20px 0 10px;
+      font-size: 2.2em;
+    }
+    header.hero p {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: var(--secondary-color);
+    }
+    /* Conteúdo principal */
+    main {
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
+    }
+    section {
+      padding: 40px 0;
+      text-align: center;
+    }
+    section h2 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      font-size: 2em;
+    }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .card {
+      background: var(--bg-color);
+      border: 2px solid var(--primary-color);
+      padding: 20px;
+      border-radius: 10px;
+      width: 200px;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    /* Footer */
+    footer {
+      background: #1f1f3a;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9em;
+      color: #aaa;
+      position: relative;
+      z-index: 1;
+    }
+    /* Mini Chat estilo ChatGPT */
+    .mini-chat {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 350px;
+      max-height: 500px;
+      background: var(--chat-bg);
+      border: 1px solid var(--primary-color);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      z-index: 101;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+    .chat-header {
+      background: var(--primary-color);
+      padding: 15px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      text-align: center;
+      font-size: 1.1em;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: var(--chat-bg);
+    }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid var(--primary-color);
+      background: var(--chat-bg);
+      border-radius: 10px;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      outline: none;
+      background: var(--chat-bg);
+      color: var(--text-color);
+      border-radius: 10px;
+    }
+    .chat-input button {
+      background: var(--accent-color);
+      border: none;
+      padding: 15px;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .chat-message {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 80%;
+      word-wrap: break-word;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+    .chat-message.user {
+      background: var(--chat-user-bg);
+      align-self: flex-end;
+      text-align: right;
+    }
+    .chat-message.bot {
+      background: var(--chat-bot-bg);
+      align-self: flex-start;
+      text-align: left;
+    }
+    @media (max-width: 768px) {
+      .mini-chat {
+        width: 90%;
+        right: 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <nav>
+    <h1>Yrozxm</h1>
+    <ul>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#interests">Interesses</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+    <div class="time-display" id="time">00:00:00</div>
+  </nav>
+  
+  <header class="hero">
+    <img src="img/perfil.gif" alt="Foto de perfil de Yrozxm">
+    <h2>Olá, eu sou o Yrozxm!</h2>
+    <p>Desenvolvedor, entusiasta de Linux e apaixonado por programação e jogos.</p>
+    <button class="btn" id="toggleChat">Abrir ChatBot</button>
+  </header>
+  
+  <main>
+    <section id="about">
+      <h2>Sobre Mim</h2>
+      <p>dead.</p>
+    </section>
+    
+    <section id="interests">
+      <h2>Interesses</h2>
+      <div class="cards">
+        <div class="card">💻 Linux & Sistemas</div>
+        <div class="card">🖥️ Programação</div>
+        <div class="card">🎮 Jogos</div>
+        <div class="card">📜 Estilo Retrô</div>
+      </div>
+    </section>
+    
+    <section id="contact">
+      <h2>Contato</h2>
+      <p>Discord: <strong>yrozxm</strong></p>
+      <p>GitHub: <a href="https://github.com/Yrozxm" target="_blank">Visite meu GitHub</a></p>
+    </section>
+  </main>
+  
+  <footer>
+    <p>&copy; 2024 Yrozxm. Desenvolvido com Tristeza.</p>
+  </footer>
+
+  <div class="mini-chat" id="miniChat" style="display: none;">
+    <div class="chat-header">ChatBot</div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message bot">Olá! Como posso ajudar você hoje?</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Digite sua mensagem...">
+      <button id="sendChat">Enviar</button>
+    </div>
+  </div>
+  
+  <script>
+    // Atualiza o horário de Portugal
+    function updateTime() {
+      const now = new Date();
+      const options = { timeZone: 'Europe/Lisbon', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      document.getElementById('time').textContent = now.toLocaleTimeString('en-GB', options);
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+    
+    // Controle do Mini Chat
+    const miniChat = document.getElementById('miniChat');
+    const toggleChatBtn = document.getElementById('toggleChat');
+    const sendChatBtn = document.getElementById('sendChat');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+    
+    toggleChatBtn.addEventListener('click', () => {
+      if(miniChat.style.display === 'none'){
+        miniChat.style.display = 'flex';
+      } else {
+        miniChat.style.display = 'none';
+      }
+    });
+    
+    sendChatBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+    
+    function sendMessage() {
+      const msg = chatInput.value.trim();
+      if(msg) {
+        appendMessage(msg, 'user');
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Simula uma resposta do ChatGPT após 1 segundo
+        setTimeout(() => {
+          const response = generateResponse(msg);
+          appendMessage(response, 'bot');
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+      }
+    }
+    
+    function appendMessage(message, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-message', sender);
+      messageDiv.textContent = message;
+      chatMessages.appendChild(messageDiv);
+    }
+    
+    function generateResponse(input) {
+      const responses = [
+      "É ela te largou não foi...",
+        "Sabes o que mais doí é não ter ela aí do seu lado...",
+        "É Cara Você é um fracassado...",
+        "A Vida já te considerou lixo...",
+        "A humanidade estará perdida se só vc viver...",
+        "Não tenho outro sentimento hoje que não seja de tristeza com o fim do vosso namoro. A culpa foi sua de investir num relacionamento que tinha tudo para dar errado e simplesmente terminou da pior forma possível...",
+        "Niggaa 🏄🏿‍♂️"
+      ];
+      return responses[Math.floor(Math.random() * responses.length)];
+    }
+    
+    // Partículas caindo
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    const numberOfParticles = 100;
+    
+    function setCanvasSize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    setCanvasSize();
+    window.addEventListener('resize', setCanvasSize);
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedY = Math.random() * 1 + 0.5;
+        this.color = `rgba(142, 68, 173, ${Math.random()})`;
+      }
+      update() {
+        this.y += this.speedY;
+        if(this.y > canvas.height) {
+          this.y = 0;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    
+    function initParticles() {
+      particlesArray = [];
+      for(let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    
+    initParticles();
+    animateParticles();
+  </script>
+</body>
+</html>
